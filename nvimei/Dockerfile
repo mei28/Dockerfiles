@@ -7,14 +7,18 @@ ARG GROUP_NAME=docker
 ARG UID=1000
 ARG GID=1000
 ARG HOME=/home/${USER_NAME}
+ARG PYTHON_VERSION=3.10
 
 ENV DEBIAN_FRONTEND="noninteractive" \
     LC_ALL="C.UTF-8" \
     LANG="C.UTF-8" \
-    TZ=Asia/Tokyo 
+    TZ=Asia/Tokyo \
+    PYTHONPATH=${APPLICATION_DIRECTORY} \
+    PYTHONUTF8=1
 
 RUN apt update && apt install --no-install-recommends -y \
-    sudo git zip unzip curl wget htop vim tmux make ssh openssh-client fzf locales-all build-essential
+    sudo git zip unzip curl wget htop vim tmux make ssh openssh-client fzf locales-all build-essential \
+    python${PYTHON_VERSION} python3-pip python-is-python3 python${PYTHON_VERSION}-venv
 
 
 ARG NODE_MAJOR=20
@@ -49,5 +53,7 @@ WORKDIR ${HOME}
 
 RUN git clone --depth=1 https://github.com/mei28/dotfiles.git ~/dotfiles && rm -rf ~/dotfiles/.git
 RUN bash ~/dotfiles/setup.sh
+
+RUN python -m venv ~/.venv
 
 RUN nvim +:q
