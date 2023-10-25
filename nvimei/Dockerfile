@@ -56,4 +56,4 @@ RUN bash ~/dotfiles/setup.sh
 
 RUN python -m venv ~/.venv
 
-RUN nvim +:q
+RUN nvim --headless +"Lazy! sync" +qa
